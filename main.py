@@ -24,19 +24,15 @@ Ideas to make the project even better:
 #Database should be in local memory
 #Maybe use flask for a clean front end?
 
-
-
 from frontEnd import *
-
-
-
+from backEnd import *
 
 
 if __name__ == '__main__':
- #  startDatabase()
- #   insert()
- #   update()
- #   read()
- #readAll()
- #   delete()
-  app.run(debug = True)
+  #startDatabase()
+  #insert()
+  #update()
+  print(readAll())
+  #delete(a8)
+
+  app.run()
