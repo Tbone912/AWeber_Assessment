@@ -32,7 +32,8 @@ if __name__ == '__main__':
   #startDatabase()
   #insert()
   #update()
-  print(readAll())
+  #print(readAll())
+  #print(read('Tim'))
   #delete(a8)
 
   app.run()

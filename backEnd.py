@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 from widget import widget
 
 def startDatabase():
@@ -29,6 +30,17 @@ def insert(widget):
   ))
   conn.commit()
   conn.close()
+
+def read(name):
+  conn = sqlite3.connect('local.db')
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM widgetTable WHERE name=?", [name])
+  rows = cur.fetchall()
+  widgets = []
+  for i in rows:
+    widgets.append(i)
+  conn.close()
+  return widgets
 
 def readAll():
   conn = sqlite3.connect('local.db')
