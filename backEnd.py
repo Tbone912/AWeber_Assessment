@@ -1,5 +1,7 @@
 import sqlite3
 import datetime
+
+from flask import render_template
 from widget import widget
 
 def startDatabase():
@@ -22,19 +24,23 @@ def createWidget(name, parts, created, updated):
 def insert(widget):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  cur.execute("INSERT INTO widgetTable VALUES (?,?,?,?)", (
-    widget.name,
-    widget.parts,
-    widget.created,
-    widget.updated
-  ))
-  conn.commit()
-  conn.close()
+  if (str(cur.execute("SELECT COUNT(*) FROM widgetTable WHERE NAME = (?)", (widget.name,)).fetchall()) == "[(0,)]"):
+    cur.execute("INSERT INTO widgetTable VALUES (?,?,?,?)", (
+      widget.name,
+      widget.parts,
+      widget.created,
+      widget.updated
+    ))
+    conn.commit()
+    conn.close()
+    print("Record Added")
+  else:
+    print("Name already exists")
 
 def read(name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM widgetTable WHERE name=?", [name])
+  cur.execute("SELECT * FROM widgetTable WHERE name=?", name)
   rows = cur.fetchall()
   widgets = []
   for i in rows:
@@ -56,8 +62,8 @@ def readAll():
 def update(widget):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  cur.execute("UPDATE widgetTable SET Number_of_Parts=?, Created_Date=?, Updated_Date=? WHERE Name=?",
-              (widget.parts, widget.created, widget.updated, widget.name))
+  cur.execute("UPDATE widgetTable SET Number_of_Parts=?, Updated_Date=? WHERE Name=?",
+              (widget.parts, widget.updated, widget.name))
   conn.commit()
   conn.close()
 
@@ -65,5 +71,12 @@ def delete(name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
   cur.execute("DELETE FROM widgetTable WHERE name=?",name)
+  conn.commit()
+  conn.close()
+
+def deleteAll():
+  conn = sqlite3.connect('local.db')
+  cur = conn.cursor()
+  cur.execute("DELETE FROM widgetTable")
   conn.commit()
   conn.close()

@@ -35,5 +35,5 @@ if __name__ == '__main__':
   #print(readAll())
   #print(read('Tim'))
   #delete(a8)
-
+  #deleteAll()
   app.run()

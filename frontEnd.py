@@ -18,6 +18,8 @@ def home():
             return redirect("/update/")
         elif request.form['submit_button'] == 'DELETE RECORD':
             return redirect("/delete/")
+        elif request.form['submit_button'] == 'DELETE ALL':
+            return redirect("/deleteAll/")
     return render_template('index.html')
 
 @app.route("/insert/",methods=['GET','POST'])
@@ -69,9 +71,10 @@ def updateRecord():
         if request.form['submit_button'] == 'UPDATE RECORD':
             name = request.form['name']
             parts = request.form['parts']
-            created = None
+            created = datetime.datetime.now()
             updated = datetime.datetime.now()
-            createWidget(name,parts,created,updated)
+            updatedWidget = createWidget(name,parts,created,updated)
+            update(updatedWidget)
         elif request.form['submit_button'] == 'BACK':
             return redirect("/")
     return render_template('update.html', nameList=nameList)
@@ -86,5 +89,10 @@ def deleteRecord():
             return redirect("/")
     return render_template('delete.html')
 
+@app.route("/deleteAll/",methods=['GET','POST'])
+def deleteAllRecords():
+    deleteAll()
+    return readAll()
+
 if __name__ == '__main__':
-   app.run()
+   app.run(debug=True)
