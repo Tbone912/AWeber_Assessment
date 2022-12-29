@@ -24,7 +24,9 @@ def createWidget(name, parts, created, updated):
 def insert(widget):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  if (str(cur.execute("SELECT COUNT(*) FROM widgetTable WHERE NAME = (?)", (widget.name,)).fetchall()) == "[(0,)]"):
+  print((widget.parts,))
+  if (str(cur.execute("SELECT COUNT(*) FROM widgetTable WHERE NAME = (?)", (widget.name,)).fetchall()) == "[(0,)]" and
+          (int(widget.parts),)):
     cur.execute("INSERT INTO widgetTable VALUES (?,?,?,?)", (
       widget.name,
       widget.parts,
