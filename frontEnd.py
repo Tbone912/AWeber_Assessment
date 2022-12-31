@@ -56,7 +56,7 @@ def viewRecord():
 def showAll():
    return readAll()
 
-@app.route('/update/',methods=['PATCH', 'GET'])
+@app.route('/update/',methods=['GET', 'POST'])
 def updateRecord():
     conn = sqlite3.connect('local.db')
     cur = conn.cursor()
@@ -66,14 +66,14 @@ def updateRecord():
     conn.commit()
     conn.close()
 
-    if request.method == 'PATCH':
+    if request.method == 'POST':
         if request.form['submit_button'] == 'UPDATE RECORD':
             name = request.form['name']
             parts = request.form['parts']
-            created = datetime.datetime.now()
-            updated = datetime.datetime.now()
+            created = datetime.now()
+            updated = datetime.now()
             updatedWidget = createWidget(name,parts,created,updated)
-            update(updatedWidget)
+            update(parts, updated, name)
         elif request.form['submit_button'] == 'BACK':
             return redirect("/")
     return render_template('update.html', nameList=nameList)

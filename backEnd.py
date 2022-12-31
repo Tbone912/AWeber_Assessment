@@ -59,18 +59,18 @@ def readAll():
   conn.close()
   return widgets
 
-def update(widget):
+def update(parts, updated, name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
   cur.execute("UPDATE widgetTable SET Number_of_Parts=?, Updated_Date=? WHERE Name=?",
-              (widget.parts, widget.updated, widget.name))
+              (parts, updated, name))
   conn.commit()
   conn.close()
 
 def delete(name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  cur.execute("DELETE FROM widgetTable WHERE name=?",name)
+  cur.execute("DELETE FROM widgetTable WHERE name=?",(name,))
   conn.commit()
   conn.close()
 
