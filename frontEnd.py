@@ -1,11 +1,10 @@
-from idlelib import query
-from re import search
+from datetime import datetime
 
 from flask import Flask, request, redirect, url_for, render_template
 from backEnd import *
 app = Flask(__name__)
 
-@app.route("/",methods=['GET','POST'])
+@app.route("/",methods=['GET','POST', 'PUT'])
 def home():
     if request.method == 'POST':
         if request.form['submit_button'] == 'INSERT RECORD':
@@ -28,7 +27,7 @@ def insertRecords():
         if request.form['submit_button'] == 'INSERT RECORD':
             name = request.form['name']
             parts = request.form['parts']
-            created = datetime.datetime.now()
+            created = datetime.now()
             updated = 0
             createWidget(name,parts,created,updated)
         elif request.form['submit_button'] == 'BACK':
@@ -57,7 +56,7 @@ def viewRecord():
 def showAll():
    return readAll()
 
-@app.route('/update/',methods=['GET','POST'])
+@app.route('/update/',methods=['PATCH', 'GET'])
 def updateRecord():
     conn = sqlite3.connect('local.db')
     cur = conn.cursor()
@@ -67,7 +66,7 @@ def updateRecord():
     conn.commit()
     conn.close()
 
-    if request.method == 'POST':
+    if request.method == 'PATCH':
         if request.form['submit_button'] == 'UPDATE RECORD':
             name = request.form['name']
             parts = request.form['parts']
@@ -81,13 +80,21 @@ def updateRecord():
 
 @app.route("/delete/",methods=['GET','POST'])
 def deleteRecord():
+    conn = sqlite3.connect('local.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM widgetTable order by name")
+    totalList = cur.fetchall()
+    nameList = [row[0] for row in totalList]
+    conn.commit()
+    conn.close()
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'DELETE RECORD':
             name = request.form['name']
             delete(name)
         elif request.form['submit_button'] == 'BACK':
             return redirect("/")
-    return render_template('delete.html')
+    return render_template('delete.html', nameList=nameList)
 
 @app.route("/deleteAll/",methods=['GET','POST'])
 def deleteAllRecords():

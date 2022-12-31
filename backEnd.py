@@ -1,7 +1,5 @@
 import sqlite3
-import datetime
 
-from flask import render_template
 from widget import widget
 
 def startDatabase():
@@ -42,7 +40,7 @@ def insert(widget):
 def read(name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
-  cur.execute("SELECT * FROM widgetTable WHERE name=?", name)
+  cur.execute("SELECT * FROM widgetTable WHERE name=?", (name,))
   rows = cur.fetchall()
   widgets = []
   for i in rows:
