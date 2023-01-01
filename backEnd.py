@@ -23,6 +23,9 @@ def insert(widget):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
   print((widget.parts,))
+  if (len(widget.name) >= 64):
+    return print("Widget name too long")
+
   if (str(cur.execute("SELECT COUNT(*) FROM widgetTable WHERE NAME = (?)", (widget.name,)).fetchall()) == "[(0,)]" and
           (int(widget.parts),)):
     cur.execute("INSERT INTO widgetTable VALUES (?,?,?,?)", (
