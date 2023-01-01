@@ -65,6 +65,9 @@ def readAll():
 def update(parts, updated, name):
   conn = sqlite3.connect('local.db')
   cur = conn.cursor()
+  if (cur.execute("SELECT COUNT(*) FROM widgetTable WHERE NAME = (?)", (widget.name,)) == 0):
+    return print("Record does not exist")
+
   cur.execute("UPDATE widgetTable SET Number_of_Parts=?, Updated_Date=? WHERE Name=?",
               (parts, updated, name))
   conn.commit()

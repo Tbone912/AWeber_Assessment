@@ -70,9 +70,7 @@ def updateRecord():
         if request.form['submit_button'] == 'UPDATE RECORD':
             name = request.form['name']
             parts = request.form['parts']
-            created = datetime.now()
             updated = datetime.now()
-            updatedWidget = createWidget(name,parts,created,updated)
             update(parts, updated, name)
         elif request.form['submit_button'] == 'BACK':
             return redirect("/")
